@@ -1,0 +1,17 @@
+{
+  "name": "alice-github",
+  "version": "1.0.0",
+  "description": "Helper to map ALICE users to Github ones",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ALICE"
+  ],
+  "author": "giulio.eulisse@gmail.com",
+  "license": "GPL3",
+  "dependencies": {
+    "octonode": "^0.7.6"
+  }
+}
