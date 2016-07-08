@@ -55,6 +55,6 @@ http.createServer(function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/plain'})
     res.end('');
   }
-}).listen(3000);
+}).listen(8888);
 
-console.log('Server started on 3000');
+console.log('Server started on 8888');
