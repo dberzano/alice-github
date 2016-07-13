@@ -34,7 +34,8 @@ http.createServer(function (req, res) {
       res.writeHead(403, {'Content-Type': 'text/plain'});
       res.end('');
     } else {
-      console.log("token> " + values.token);
+      console.log("values> " + values);
+      console.log("uri.query> " + uri.query);
       res.end('noop');
       return;
       github.auth.login(values.code, function (err, token) {
