@@ -60,8 +60,12 @@ http.createServer(function (req, res) {
         // and map the ADFS_LOGIN to the github username.
         client = github.client(token);
         client.get('/user', {}, function (err, status, body, headers) {
-          console.log("err> " + err);
-          console.log("body> " + JSON.stringify(body));
+          console.log("/user:err: " + err);
+          console.log("/user:body: " + JSON.stringify(body));
+          if (err || body.login == undefined) {
+            res.writeHead(403, nocache({'Content-Type': 'text/plain'}));
+            res.end('Unable to fetch GitHub account name.');
+          }
           db.query("INSERT INTO alice_github.user_mapping (cern_login, github_login) " +
                    "VALUES (?, ?) ON DUPLICATE KEY UPDATE github_login = ?;",
                    [req.headers.adfs_login, body.login, body.login],
@@ -80,8 +84,8 @@ http.createServer(function (req, res) {
              [req.headers.adfs_login],
              function(err, rows) {
                res.writeHead(200, nocache({'Content-Type': 'text/html'}));
-               console.log("err> " + err);
-               console.log("rows> " + JSON.stringify(rows));
+               console.log("/whoami:err: " + err);
+               console.log("/whoami:rows: " + JSON.stringify(rows));
                if (!err && rows && rows.length) {
                  res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
                          "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
