@@ -45,7 +45,7 @@ http.createServer(function (req, res) {
           res.end(JSON.stringify(process.env, null, 2) + "\n\n" +
                   JSON.stringify(headers,     null, 2) + "\n\n" +
                   JSON.stringify(body,        null, 2) + "\n\n" +
-                  JSON.stringify(req.keys(),  null, 2) + "\n\n" +
+                  JSON.stringify(Object.keys(req), null, 2) + "\n\n" +
                   JSON.stringify(req.headers, null, 2) + "\n\n" +
                   JSON.stringify(req.params,  null, 2));
         });
