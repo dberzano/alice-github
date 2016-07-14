@@ -66,16 +66,29 @@ http.createServer(function (req, res) {
                    "VALUES (?, ?) ON DUPLICATE KEY UPDATE github_login = ?;",
                    [req.headers.adfs_login, body.login, body.login],
                    function(dberr, dbres) {
-                     console.log("dberr> " + dberr);
-                     res.writeHead(200, nocache({'Content-Type': 'text/html'}));
-                     res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
-                             "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
-                             "<tt>" + body.login + "</tt> on GitHub.<br/>" +
-                             "<a href=\"https://alisw.github.io/git-tutorial\">Proceed to the tutorial.</a>");
+                     res.writeHead(302, nocache({'Content-Type': 'text/html',
+                                                 'Location': process.env.ALICE_GITHUB_PREFIX+'/whoami'}));
+                     res.end('');
                    });
         });
       });
     }
+  }
+  else if (uri.pathname=='/whoami') {
+    db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;"
+             [req.headers.adfs_login],
+             function(err, results, fields) {
+               console.log("results> " + JSON.stringify(results));
+               console.log("fields> " + JSON.stringify(fields));
+               res.writeHead(200, nocache({'Content-Type': 'text/html'}));
+               if (results.length) {
+                 res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
+                         "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
+                         "<tt>" + results[0][0] + "</tt> on GitHub.<br/>" +
+                         "<a href=\"https://alisw.github.io/git-tutorial\">Proceed to the tutorial.</a>");
+               }
+               res.end("I don't know who you are on GitHub.");
+             });
   }
   else if (uri.pathname == "/pull-request-hook") {
     // Pull request hook should push PR for later
