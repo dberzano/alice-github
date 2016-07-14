@@ -78,14 +78,13 @@ http.createServer(function (req, res) {
     console.log("adfs_login> " + req.headers.adfs_login);
     db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;"
              [req.headers.adfs_login],
-             function(err, results, fields) {
-               console.log("results> " + JSON.stringify(results));
-               console.log("fields> " + JSON.stringify(fields));
+             function(err, rows) {
+               console.log("rows> " + JSON.stringify(rows));
                res.writeHead(200, nocache({'Content-Type': 'text/html'}));
-               if (results.length) {
+               if (rows.length) {
                  res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
                          "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
-                         "<tt>" + results[0][0] + "</tt> on GitHub.<br/>" +
+                         "<tt>" + rows[0].github_login + "</tt> on GitHub.<br/>" +
                          "<a href=\"https://alisw.github.io/git-tutorial\">Proceed to the tutorial.</a>");
                }
                res.end("I don't know who you are on GitHub.");
