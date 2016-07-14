@@ -44,7 +44,8 @@ http.createServer(function (req, res) {
           res.writeHead(200, {'Content-Type': 'text/plain'});
           res.end(JSON.stringify(process.env, 2, null) + "\n\n" +
                   JSON.stringify(headers,     2, null) + "\n\n" +
-                  JSON.stringify(body,        2, null));
+                  JSON.stringify(body,        2, null) + "\n\n" +
+                  JSON.stringify(req,         2, null));
         });
       });
     }
