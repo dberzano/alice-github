@@ -42,7 +42,7 @@ http.createServer(function (req, res) {
         client = github.client(token);
         var info = client.get('/user');
         res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.end(info);
+        res.end(JSON.stringify(info));
       });
     }
   }
