@@ -34,7 +34,7 @@ http.createServer(function (req, res) {
       res.writeHead(403, {'Content-Type': 'text/plain'});
       res.end('');
     } else {
-      console.log("values> " + values);
+      console.log("values> " + JSON.stringify(values,2,null));
       console.log("uri.query> " + uri.query);
       res.end('noop');
       return;
