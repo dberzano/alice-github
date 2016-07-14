@@ -52,7 +52,8 @@ http.createServer(function (req, res) {
           db.query("INSERT INTO alice_github.user_mapping (cern_login,github_login)" +
                    "VALUES (?, ?) ON DUPLICATE KEY UPDATE",
                    [req.headers.adfs_login, body.login],
-                   function(err, dbres) {
+                   function(dberr, dbres) {
+                     console.log("dberr> " + dberr);
                      res.writeHead(200, {'Content-Type': 'text/html'});
                      res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
                              "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
