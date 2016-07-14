@@ -36,8 +36,6 @@ http.createServer(function (req, res) {
     } else {
       console.log("values> " + JSON.stringify(values,2,null));
       console.log("uri.query> " + uri.query);
-      res.end('noop');
-      return;
       github.auth.login(values.code, function (err, token) {
         // Now we have a token. Let's create an authenticated client with it
         // and map the ADFS_LOGIN to the github username.
