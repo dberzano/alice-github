@@ -82,7 +82,7 @@ http.createServer(function (req, res) {
                res.writeHead(200, nocache({'Content-Type': 'text/html'}));
                console.log("err> " + err);
                console.log("rows> " + JSON.stringify(rows));
-               if (rows) {
+               if (!err && rows && rows.length) {
                  res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
                          "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
                          "<tt>" + rows[0].github_login + "</tt> on GitHub.<br/>" +
