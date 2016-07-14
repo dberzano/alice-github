@@ -40,9 +40,10 @@ http.createServer(function (req, res) {
         // Now we have a token. Let's create an authenticated client with it
         // and map the ADFS_LOGIN to the github username.
         client = github.client(token);
-        var info = client.get('/user');
-        res.writeHead(200, {'Content-Type': 'text/plain'});
-        res.end(JSON.stringify(info));
+        client.get('/user', {}, function (err, status, body, headers) {
+          res.writeHead(200, {'Content-Type': 'text/plain'});
+          res.end(process.env.ADFS_LOGIN + "\n\n" + JSON.stringify(headers) + "\n\n" + JSON.stringify(body));
+        });
       });
     }
   }
