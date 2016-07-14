@@ -65,6 +65,7 @@ http.createServer(function (req, res) {
           if (err || body || body.login == undefined) {
             res.writeHead(403, nocache({'Content-Type': 'text/plain'}));
             res.end('Unable to fetch GitHub account name.');
+            return;
           }
           db.query("INSERT INTO alice_github.user_mapping (cern_login, github_login) " +
                    "VALUES (?, ?) ON DUPLICATE KEY UPDATE github_login = ?;",
