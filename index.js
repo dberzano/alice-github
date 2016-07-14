@@ -49,7 +49,7 @@ http.createServer(function (req, res) {
         client.get('/user', {}, function (err, status, body, headers) {
           console.log("err> " + err);
           console.log("body> " + JSON.stringify(body));
-          db.query("INSERT INTO alice_github.user_mapping (cern_login,github_login)" +
+          db.query("INSERT INTO alice_github.user_mapping (cern_login,github_login) " +
                    "VALUES (?, ?) ON DUPLICATE KEY UPDATE",
                    [req.headers.adfs_login, body.login],
                    function(dberr, dbres) {
