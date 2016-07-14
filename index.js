@@ -42,10 +42,10 @@ http.createServer(function (req, res) {
         client = github.client(token);
         client.get('/user', {}, function (err, status, body, headers) {
           res.writeHead(200, {'Content-Type': 'text/plain'});
-          res.end(JSON.stringify(process.env, 2, null) + "\n\n" +
-                  JSON.stringify(headers,     2, null) + "\n\n" +
-                  JSON.stringify(body,        2, null) + "\n\n" +
-                  JSON.stringify(req,         2, null));
+          res.end(JSON.stringify(process.env, null, 2) + "\n\n" +
+                  JSON.stringify(headers,     null, 2) + "\n\n" +
+                  JSON.stringify(body,        null, 2) + "\n\n" +
+                  JSON.stringify(req,         null, 2));
         });
       });
     }
