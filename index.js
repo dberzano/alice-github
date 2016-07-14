@@ -80,7 +80,7 @@ http.createServer(function (req, res) {
     }
   }
   else if (uri.pathname=='/whoami') {
-    console.log("adfs_login> " + req.headers.adfs_login);
+    console.log("/whoami:adfs_login: " + req.headers.adfs_login);
     db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;",
              [req.headers.adfs_login],
              function(err, rows) {
@@ -101,11 +101,18 @@ http.createServer(function (req, res) {
     // processing.
   }
   else if (uri.pathname == "/health") {
-    res.writeHead(200, nocache({'Content-Type': 'text/plain'}));
-    res.end('{"status": "ok"}');
+    db.ping(function (err) {
+      if (err) {
+        res.writeHead(500, nocache({'Content-Type': 'text/plain'}));
+        res.end('{"status": "cannot ping database"}');
+        return;
+      }
+      res.writeHead(200, nocache({'Content-Type': 'text/plain'}));
+      res.end('{"status": "ok"}');
+    });
   } else {
-    res.writeHead(200, nocache({'Content-Type': 'text/plain'}));
-    res.end('');
+    res.writeHead(404, nocache({'Content-Type': 'text/plain'}));
+    res.end('Endpoint undefined');
   }
 }).listen(8888);
 
