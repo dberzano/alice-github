@@ -62,7 +62,7 @@ http.createServer(function (req, res) {
         client.get('/user', {}, function (err, status, body, headers) {
           console.log("/user:err: " + err);
           console.log("/user:body: " + JSON.stringify(body));
-          if (err || body.login == undefined) {
+          if (err || body || body.login == undefined) {
             res.writeHead(403, nocache({'Content-Type': 'text/plain'}));
             res.end('Unable to fetch GitHub account name.');
           }
