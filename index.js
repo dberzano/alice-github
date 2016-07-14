@@ -79,6 +79,7 @@ http.createServer(function (req, res) {
     db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;"
              [req.headers.adfs_login],
              function(err, rows) {
+               console.log("err> " + err);
                console.log("rows> " + JSON.stringify(rows));
                res.writeHead(200, nocache({'Content-Type': 'text/html'}));
                if (rows.length) {
