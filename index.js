@@ -76,13 +76,13 @@ http.createServer(function (req, res) {
   }
   else if (uri.pathname=='/whoami') {
     console.log("adfs_login> " + req.headers.adfs_login);
-    db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;"
+    db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;",
              [req.headers.adfs_login],
              function(err, rows) {
+               res.writeHead(200, nocache({'Content-Type': 'text/html'}));
                console.log("err> " + err);
                console.log("rows> " + JSON.stringify(rows));
-               res.writeHead(200, nocache({'Content-Type': 'text/html'}));
-               if (rows.length) {
+               if (rows) {
                  res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
                          "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
                          "<tt>" + rows[0].github_login + "</tt> on GitHub.<br/>" +
