@@ -42,7 +42,9 @@ http.createServer(function (req, res) {
         client = github.client(token);
         client.get('/user', {}, function (err, status, body, headers) {
           res.writeHead(200, {'Content-Type': 'text/plain'});
-          res.end(process.env.ADFS_LOGIN + "\n\n" + JSON.stringify(headers) + "\n\n" + JSON.stringify(body));
+          res.end(JSON.stringify(process.env, 2, null) + "\n\n" +
+                  JSON.stringify(headers,     2, null) + "\n\n" +
+                  JSON.stringify(body,        2, null));
         });
       });
     }
