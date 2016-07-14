@@ -75,6 +75,7 @@ http.createServer(function (req, res) {
     }
   }
   else if (uri.pathname=='/whoami') {
+    console.log("adfs_login> " + req.headers.adfs_login);
     db.query("SELECT github_login FROM alice_github.user_mapping WHERE cern_login = ?;"
              [req.headers.adfs_login],
              function(err, results, fields) {
