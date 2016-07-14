@@ -16,8 +16,21 @@ var auth_url = github.auth.config({
   apiUrl: process.env.GITHUB_API
 }).login(['user']);
 
+function nocache(d) {
+  var resp = {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0"
+  };
+  for (k in d) {
+    resp[k] = d[k];
+  }
+  return resp;
+}
+
 // Store info to verify against CSRF
 var state = auth_url.match(/&state=([0-9a-z]{32})/i);
+
 var db = mysql.createConnection(process.env.ALICE_GITHUB_DB);
 db.query("CREATE DATABASE IF NOT EXISTS alice_github;", function(err, res) {
   db.query("CREATE TABLE IF NOT EXISTS alice_github.user_mapping (" +
@@ -31,7 +44,7 @@ http.createServer(function (req, res) {
   uri = url.parse(req.url);
   // Redirect to github login
   if (uri.pathname=='/login') {
-    res.writeHead(302, {'Content-Type': 'text/plain', 'Location': auth_url})
+    res.writeHead(302, nocache({'Content-Type': 'text/plain', 'Location': auth_url}));
     res.end('Redirecting to ' + auth_url);
   }
   // Callback url from github login
@@ -39,7 +52,7 @@ http.createServer(function (req, res) {
     var values = qs.parse(uri.query);
     // Check against CSRF attacks
     if (!state || state[1] != values.state) {
-      res.writeHead(403, {'Content-Type': 'text/plain'});
+      res.writeHead(403, nocache({'Content-Type': 'text/plain'}));
       res.end('');
     } else {
       github.auth.login(values.code, function (err, token) {
@@ -54,7 +67,7 @@ http.createServer(function (req, res) {
                    [req.headers.adfs_login, body.login],
                    function(dberr, dbres) {
                      console.log("dberr> " + dberr);
-                     res.writeHead(200, {'Content-Type': 'text/html'});
+                     res.writeHead(200, nocache({'Content-Type': 'text/html'}));
                      res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
                              "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
                              "<tt>" + body.login + "</tt> on GitHub.<br/>" +
@@ -69,10 +82,10 @@ http.createServer(function (req, res) {
     // processing.
   }
   else if (uri.pathname == "/health") {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.writeHead(200, nocache({'Content-Type': 'text/plain'}));
     res.end('{"status": "ok"}');
   } else {
-    res.writeHead(200, {'Content-Type': 'text/plain'})
+    res.writeHead(200, nocache({'Content-Type': 'text/plain'}));
     res.end('');
   }
 }).listen(8888);
