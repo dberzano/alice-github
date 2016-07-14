@@ -41,13 +41,11 @@ http.createServer(function (req, res) {
         // and map the ADFS_LOGIN to the github username.
         client = github.client(token);
         client.get('/user', {}, function (err, status, body, headers) {
-          res.writeHead(200, {'Content-Type': 'text/plain'});
-          res.end(JSON.stringify(process.env, null, 2) + "\n\n" +
-                  JSON.stringify(headers,     null, 2) + "\n\n" +
-                  JSON.stringify(body,        null, 2) + "\n\n" +
-                  JSON.stringify(Object.keys(req), null, 2) + "\n\n" +
-                  JSON.stringify(req.headers, null, 2) + "\n\n" +
-                  JSON.stringify(req.params,  null, 2));
+          res.writeHead(200, {'Content-Type': 'text/html'});
+          res.end("Hello " + req.headers.adfs_fullname + ".<br/>" +
+                  "You are <tt>" + req.headers.adfs_login + "</tt> at CERN and " +
+                  "<tt>" + body.login + "</tt> on GitHub.<br/>" +
+                  "<a href=\"https://alisw.github.io/git-tutorial\">Proceed to the tutorial.</a>");
         });
       });
     }
